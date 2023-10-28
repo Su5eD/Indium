@@ -15,7 +15,7 @@ String getGitVersion(Project project) {
 	if (grgit != null) {
 		var dirty = grgit.status().clean ? "" : "-dirty"
 		// If we're going to create (or have created) a git tag, don't use dev version
-		var willCreate = System.getenv("EXPECTED_VERSION") !== null && System.getenv("GITHUB_TOKEN")
+		var willCreate = System.getenv("GITHUB_TOKEN")
 		if (willCreate || grgit.describe(tags: true) == "${project.mod_version}+mc${project.minecraft_version}") {
 			version = "${project.mod_version}+mc${project.minecraft_version}${dirty}"
 		} else {
@@ -169,7 +169,7 @@ publishMods {
         displayName.set(verName)
         requires {
             slug.set("embeddium")
-            version.set("${project.embeddium_version}+mc${project.embeddium_minecraft_version}")
+            version.set(project.embeddium_version_id)
         }
         requires("forgified-fabric-api")
         incompatible("indium")
