@@ -18,6 +18,9 @@ package link.infra.indium.renderer.render;
 
 import java.util.function.Consumer;
 
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.model.BakedQuad;
+import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -114,24 +117,43 @@ abstract class AbstractRenderContext implements RenderContext {
 			normalVec.mul(normalMatrix);
 		}
 
-		for (int i = 0; i < 4; i++) {
-			posVec.set(quad.x(i), quad.y(i), quad.z(i), 1.0f);
-			posVec.mul(matrix);
-			vertexConsumer.vertex(posVec.x(), posVec.y(), posVec.z());
+		// Use fast track for the default vanilla implementation
+		if (vertexConsumer instanceof BufferBuilder) {
+			for (int i = 0; i < 4; i++) {
+				posVec.set(quad.x(i), quad.y(i), quad.z(i), 1.0f);
+				posVec.mul(matrix);
+				vertexConsumer.vertex(posVec.x(), posVec.y(), posVec.z());
 
-			final int color = quad.color(i);
-			vertexConsumer.color((color >>> 16) & 0xFF, (color >>> 8) & 0xFF, color & 0xFF, (color >>> 24) & 0xFF);
-			vertexConsumer.texture(quad.u(i), quad.v(i));
-			vertexConsumer.overlay(overlay);
-			vertexConsumer.light(quad.lightmap(i));
+				final int color = quad.color(i);
+				vertexConsumer.color((color >>> 16) & 0xFF, (color >>> 8) & 0xFF, color & 0xFF, (color >>> 24) & 0xFF);
+				vertexConsumer.texture(quad.u(i), quad.v(i));
+				vertexConsumer.overlay(overlay);
+				vertexConsumer.light(quad.lightmap(i));
 
-			if (useNormals) {
-				quad.copyNormal(i, normalVec);
-				normalVec.mul(normalMatrix);
+				if (useNormals) {
+					quad.copyNormal(i, normalVec);
+					normalVec.mul(normalMatrix);
+				}
+
+				vertexConsumer.normal(normalVec.x(), normalVec.y(), normalVec.z());
+				vertexConsumer.next();
 			}
-
-			vertexConsumer.normal(normalVec.x(), normalVec.y(), normalVec.z());
-			vertexConsumer.next();
+		}
+		// Other implementations (namely Flywheel's ShadeSeparatingVertexConsumer) only support calling putBulkData
+		// However, this results in a few additional operations made, so we only use it when necessary
+		else {
+			MatrixStack.Entry entry = new MatrixStack().peek();
+			entry.getPositionMatrix().set(matrix);
+			entry.getNormalMatrix().set(normalMatrix);
+			BakedQuad bakedQuad = quad.toBakedQuad(null);
+			vertexConsumer.putBulkData(
+				entry,
+				bakedQuad,
+				1.0F, 1.0F, 1.0F, 1.0F,
+				0,
+				overlay,
+				true
+			);
 		}
 
 		Sprite sprite = quad.cachedSprite();
