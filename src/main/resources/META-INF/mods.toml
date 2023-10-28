@@ -1,33 +1,65 @@
 modLoader="javafml"
 loaderVersion="[47,)"
 license="Apache-2.0"
-issueTrackerURL="https://github.com/Su5eD/Indium/issues"
+issueTrackerURL="https://github.com/Su5eD/Lazurite/issues"
 
 [[mods]]
-modId="indium"
+modId="lazurite"
 version="${file.jarVersion}"
-displayName="Indium"
-logoFile="assets/indium/icon.png"
+displayName="Lazurite"
+logoFile= "../assets/lazurite/icon.png"
 authors="Su5eD"
 credits="comp500"
-displayURL="https://github.com/Su5eD/Indium"
+displayURL="https://github.com/Su5eD/Lazurite"
 description='''
-Sodium addon providing support for the Fabric Rendering API, based on Indigo
+Forge port of Indium, a Sodium addon providing support for the Fabric Rendering API, based on Indigo.
 '''
-displayTest = 'IGNORE_SERVER_VERSION'
+displayTest = "IGNORE_SERVER_VERSION"
+# FFLoader attribute
+provides = ["indium"]
 
-[modproperties.indium]
+[modproperties.lazurite]
 "fabric-renderer-api-v1:contains_renderer"=true
 
-[[dependencies.indium]]
+[[dependencies.lazurite]]
     modId="forge"
     mandatory=true
     versionRange="[47,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.indium]]
+[[dependencies.lazurite]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.lazurite]]
+    modId="embeddium"
+    mandatory=true
+    versionRange="[0.2.5, 0.3)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.lazurite]]
+    modId="fabric_renderer_api_v1"
+    mandatory=true
+    versionRange="[0, )"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.lazurite]]
+    modId="fabric_resource_loader_v0"
+    mandatory=true
+    versionRange="[0, )"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.lazurite]]
+    modId="fabric_block_view_api_v2"
+    mandatory=true
+    versionRange="[0, )"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.lazurite]]
+    modId="fabric_rendering_data_attachment_v1"
+    mandatory=true
+    versionRange="[0, )"
     ordering="NONE"
     side="BOTH"

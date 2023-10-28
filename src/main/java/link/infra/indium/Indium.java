@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
 
+import net.minecraftforge.fml.loading.FMLLoader;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -40,7 +41,7 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.resource.ResourceType;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod("indium")
+@Mod("lazurite")
 public class Indium {
 	public static final boolean ALWAYS_TESSELLATE_INDIUM;
 	public static final AoConfig AMBIENT_OCCLUSION_MODE;
@@ -113,6 +114,9 @@ public class Indium {
 	}
 
 	public Indium() {
+		if (!FMLLoader.getDist().isClient()) {
+			return;
+		}
 		try {
 			RendererAccess.INSTANCE.registerRenderer(IndiumRenderer.INSTANCE);
 		} catch (UnsupportedOperationException e) {

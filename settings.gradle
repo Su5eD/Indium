@@ -19,3 +19,5 @@ sourceControl {
 		producesModule("me.jellysquid.mods:sodium-fabric")
 	}
 }
+
+rootProject.name = 'Lazurite'
