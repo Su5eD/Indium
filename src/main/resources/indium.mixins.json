@@ -9,7 +9,9 @@
 	"renderer.MixinBakedModel",
     "sodium.AccessBlockRenderer",
     "sodium.MixinBlockRenderCache",
-    "sodium.MixinChunkBuilderMeshingTask"
+    "sodium.MixinChunkBuilderMeshingTask",
+    "sodium.MixinWorldSlice",
+    "sodium.MixinClonedChunkSection"
   ],
   "injectors": {
     "defaultRequire": 1
