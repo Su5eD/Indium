@@ -18,6 +18,8 @@ package link.infra.indium.renderer.render;
 
 import java.util.function.Supplier;
 
+import net.minecraft.client.render.RenderLayers;
+import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
@@ -26,7 +28,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
@@ -49,6 +50,7 @@ public class BlockRenderInfo {
 
 	boolean useAo;
 	boolean defaultAo;
+	ModelData blockModelData;
 	RenderLayer defaultLayer;
 
 	Random random;
@@ -67,7 +69,7 @@ public class BlockRenderInfo {
 		this.enableCulling = enableCulling;
 	}
 
-	public void prepareForBlock(BlockState blockState, BlockPos blockPos, long seed, boolean modelAo) {
+	public void prepareForBlock(BlockState blockState, BlockPos blockPos, long seed, boolean modelAo, ModelData modelData, RenderLayer renderLayer) {
 		this.blockPos = blockPos;
 		this.blockState = blockState;
 		this.seed = seed;
@@ -75,7 +77,8 @@ public class BlockRenderInfo {
 		useAo = MinecraftClient.isAmbientOcclusionEnabled();
 		defaultAo = useAo && modelAo && blockState.getLuminance() == 0;
 
-		defaultLayer = RenderLayers.getBlockLayer(blockState);
+		blockModelData = modelData;
+		defaultLayer = renderLayer != null ? renderLayer : RenderLayers.getBlockLayer(blockState);
 
 		cullCompletionFlags = 0;
 		cullResultFlags = 0;

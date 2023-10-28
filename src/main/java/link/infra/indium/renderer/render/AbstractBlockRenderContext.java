@@ -38,6 +38,7 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
+import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -85,6 +86,16 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
 	public QuadEmitter getEmitter() {
 		editorQuad.clear();
 		return editorQuad;
+	}
+
+	@Override
+	public ModelData getModelData() {
+		return blockInfo.blockModelData;
+	}
+
+	@Override
+	public RenderLayer getRenderLayer() {
+		return blockInfo.defaultLayer;
 	}
 
 	public QuadEmitter getVanillaModelEmitter() {

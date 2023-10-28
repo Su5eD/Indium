@@ -128,7 +128,7 @@ public class TerrainRenderContext extends AbstractBlockRenderContext {
 			this.modelOffset = ctx.state().getModelOffset(ctx.world(), ctx.pos());
 
 			aoCalc.clear();
-			blockInfo.prepareForBlock(ctx.state(), ctx.pos(), ctx.seed(), ctx.model().useAmbientOcclusion());
+			blockInfo.prepareForBlock(ctx.state(), ctx.pos(), ctx.seed(), ctx.model().useAmbientOcclusion(), ctx.modelData(), ctx.renderLayer());
 			((FabricBakedModel) ctx.model()).emitBlockQuads(blockInfo.blockView, blockInfo.blockState, blockInfo.blockPos, blockInfo.randomSupplier, this);
 		} catch (Throwable throwable) {
 			CrashReport crashReport = CrashReport.create(throwable, "Tessellating block in world - Indium Renderer");

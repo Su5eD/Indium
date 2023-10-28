@@ -18,6 +18,8 @@ package link.infra.indium.mixin.renderer;
 
 import java.util.BitSet;
 
+import net.minecraft.client.render.RenderLayer;
+import net.minecraftforge.client.model.data.ModelData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -47,11 +49,11 @@ public abstract class MixinBlockModelRenderer implements AccessBlockModelRendere
 	@Shadow
 	protected abstract void getQuadDimensions(BlockRenderView blockView, BlockState blockState, BlockPos blockPos, int[] vertexData, Direction face, float[] aoData, BitSet controlBits);
 
-	@Inject(at = @At("HEAD"), method = "render(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;ZLnet/minecraft/util/math/random/Random;JI)V", cancellable = true)
-	private void hookRender(BlockRenderView blockView, BakedModel model, BlockState state, BlockPos pos, MatrixStack matrix, VertexConsumer buffer, boolean cull, Random rand, long seed, int overlay, CallbackInfo ci) {
+	@Inject(at = @At("HEAD"), method = "tesselateBlock(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;ZLnet/minecraft/util/math/random/Random;JILnet/minecraftforge/client/model/data/ModelData;Lnet/minecraft/client/render/RenderLayer;)V", cancellable = true)
+	private void hookRender(BlockRenderView blockView, BakedModel model, BlockState state, BlockPos pos, MatrixStack matrix, VertexConsumer buffer, boolean cull, Random rand, long seed, int overlay, ModelData modelData, RenderLayer renderType, CallbackInfo ci) {
 		if (!((FabricBakedModel) model).isVanillaAdapter()) {
 			NonTerrainBlockRenderContext context = indium_contexts.get();
-			context.render(blockView, model, state, pos, matrix, buffer, cull, rand, seed, overlay);
+			context.render(blockView, model, state, pos, matrix, buffer, cull, rand, seed, overlay, modelData, renderType);
 			ci.cancel();
 		}
 	}

@@ -22,12 +22,14 @@ import me.jellysquid.mods.sodium.client.model.light.data.LightDataAccess;
 import me.jellysquid.mods.sodium.client.render.chunk.terrain.material.Material;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
+import net.minecraftforge.client.model.data.ModelData;
 
 /**
  * Context for non-terrain block rendering.
@@ -51,7 +53,7 @@ public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
 		bufferQuad(quad, vertexConsumer);
 	}
 
-	public void render(BlockRenderView blockView, BakedModel model, BlockState state, BlockPos pos, MatrixStack matrixStack, VertexConsumer buffer, boolean cull, Random random, long seed, int overlay) {
+	public void render(BlockRenderView blockView, BakedModel model, BlockState state, BlockPos pos, MatrixStack matrixStack, VertexConsumer buffer, boolean cull, Random random, long seed, int overlay, ModelData modelData, RenderLayer renderLayer) {
 		this.vertexConsumer = buffer;
 		this.matrix = matrixStack.peek().getPositionMatrix();
 		this.normalMatrix = matrixStack.peek().getNormalMatrix();
@@ -62,7 +64,7 @@ public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
 		aoCalc.clear();
 		lightCache.reset(pos, blockView);
 		blockInfo.prepareForWorld(blockView, cull);
-		blockInfo.prepareForBlock(state, pos, seed, model.useAmbientOcclusion());
+		blockInfo.prepareForBlock(state, pos, seed, model.useAmbientOcclusion(), modelData, renderLayer);
 
 		((FabricBakedModel) model).emitBlockQuads(blockView, state, pos, blockInfo.randomSupplier, this);
 
