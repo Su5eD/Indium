@@ -134,18 +134,6 @@ publishing {
 def supportedVersions = ["${project.minecraft_version}", "1.20.2"]
 def verName =  "${project.name} ${project.mod_version} for Minecraft 1.20.x/Embeddium ${project.embeddium_version}"
 
-// Check version is as expected
-if (System.getenv("EXPECTED_VERSION") !== null) {
-	assert System.getenv("EXPECTED_VERSION") == project.version
-}
-
-publish {
-	doFirst {
-		// Require the user to "expect" a version to publish
-		assert System.getenv("EXPECTED_VERSION") !== null : "EXPECTED_VERSION environment variable must be set to publish"
-	}
-}
-
 publishMods {
     file.set(remapJar.archiveFile)
     changelog.set(provider { getChangelog(null) })

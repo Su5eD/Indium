@@ -1,22 +1,18 @@
-name: Java Gradle Release
+name: Release
+on: [ workflow_dispatch ] # Manual trigger
 
-on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version/tag to create"
-        required: true
-        type: string
+permissions:
+  actions: read
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     environment:
       name: release
-      url: https://modrinth.com/mod/indium
-
+      url: https://modrinth.com/mod/lazurite
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up JDK 17
@@ -25,13 +21,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
-      - name: Publish with Gradle
-        run: ./gradlew publish
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
+          gradle-home-cache-excludes: |
+            gradle.properties
+      - uses: gradle/wrapper-validation-action@v1
+      - run: ./gradlew clean build publishMods --stacktrace
         env:
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          EXPECTED_VERSION: ${{ inputs.version }}
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.
