@@ -1,5 +1,6 @@
 package link.infra.indium.renderer.render;
 
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import org.joml.Vector3fc;
 
 import link.infra.indium.mixin.sodium.AccessBlockRenderer;
@@ -128,7 +129,7 @@ public class TerrainRenderContext extends AbstractBlockRenderContext {
 
 			aoCalc.clear();
 			blockInfo.prepareForBlock(ctx.state(), ctx.pos(), ctx.seed(), ctx.model().useAmbientOcclusion());
-			ctx.model().emitBlockQuads(blockInfo.blockView, blockInfo.blockState, blockInfo.blockPos, blockInfo.randomSupplier, this);
+			((FabricBakedModel) ctx.model()).emitBlockQuads(blockInfo.blockView, blockInfo.blockState, blockInfo.blockPos, blockInfo.randomSupplier, this);
 		} catch (Throwable throwable) {
 			CrashReport crashReport = CrashReport.create(throwable, "Tessellating block in world - Indium Renderer");
 			CrashReportSection crashReportSection = crashReport.addElement("Block being tessellated");

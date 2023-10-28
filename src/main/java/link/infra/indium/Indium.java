@@ -32,15 +32,16 @@ import com.mojang.logging.LogUtils;
 import link.infra.indium.other.SpriteFinderCache;
 import link.infra.indium.renderer.IndiumRenderer;
 import link.infra.indium.renderer.aocalc.AoConfig;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.util.TriState;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.resource.ResourceType;
+import net.minecraftforge.fml.common.Mod;
 
-public class Indium implements ClientModInitializer {
+@Mod("indium")
+public class Indium {
 	public static final boolean ALWAYS_TESSELLATE_INDIUM;
 	public static final AoConfig AMBIENT_OCCLUSION_MODE;
 
@@ -111,8 +112,7 @@ public class Indium implements ClientModInitializer {
 		}
 	}
 
-	@Override
-	public void onInitializeClient() {
+	public Indium() {
 		try {
 			RendererAccess.INSTANCE.registerRenderer(IndiumRenderer.INSTANCE);
 		} catch (UnsupportedOperationException e) {

@@ -10,6 +10,7 @@ import me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.BlockRende
 import me.jellysquid.mods.sodium.client.render.chunk.compile.tasks.ChunkBuilderMeshingTask;
 import me.jellysquid.mods.sodium.client.render.chunk.compile.tasks.ChunkBuilderTask;
 import me.jellysquid.mods.sodium.client.util.task.CancellationToken;
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,7 +40,7 @@ public abstract class MixinChunkBuilderMeshingTask extends ChunkBuilderTask<Chun
 		at = @At(value = "INVOKE", target = "Lme/jellysquid/mods/sodium/client/render/chunk/compile/pipeline/BlockRenderer;renderModel(Lme/jellysquid/mods/sodium/client/render/chunk/compile/pipeline/BlockRenderContext;Lme/jellysquid/mods/sodium/client/render/chunk/compile/ChunkBuildBuffers;)V", remap = false), remap = false)
 	public void onRenderBlock(BlockRenderer blockRenderer, BlockRenderContext ctx, ChunkBuildBuffers buffers, ChunkBuildContext buildContext, CancellationToken cancellationToken) {
 		// We need to get the model with a bit more context than BlockRenderer has, so we do it here
-		if (Indium.ALWAYS_TESSELLATE_INDIUM || !ctx.model().isVanillaAdapter()) {
+		if (Indium.ALWAYS_TESSELLATE_INDIUM || !((FabricBakedModel) ctx.model()).isVanillaAdapter()) {
 			TerrainRenderContext.get(buildContext).tessellateBlock(ctx);
 		} else {
 			blockRenderer.renderModel(ctx, buffers);

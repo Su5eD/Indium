@@ -20,6 +20,7 @@ import link.infra.indium.renderer.aocalc.AoCalculator;
 import link.infra.indium.renderer.mesh.MutableQuadViewImpl;
 import me.jellysquid.mods.sodium.client.model.light.data.LightDataAccess;
 import me.jellysquid.mods.sodium.client.render.chunk.terrain.material.Material;
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.model.BakedModel;
@@ -63,7 +64,7 @@ public class NonTerrainBlockRenderContext extends AbstractBlockRenderContext {
 		blockInfo.prepareForWorld(blockView, cull);
 		blockInfo.prepareForBlock(state, pos, seed, model.useAmbientOcclusion());
 
-		model.emitBlockQuads(blockView, state, pos, blockInfo.randomSupplier, this);
+		((FabricBakedModel) model).emitBlockQuads(blockView, state, pos, blockInfo.randomSupplier, this);
 
 		// blockInfo is thread-local, not cleaned up when leaving world (and could be called for arbitrary BlockRenderViews)
 		blockInfo.release();

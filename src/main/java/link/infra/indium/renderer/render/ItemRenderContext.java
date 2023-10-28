@@ -22,6 +22,7 @@ import link.infra.indium.renderer.mesh.MutableQuadViewImpl;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.util.TriState;
 import net.fabricmc.fabric.impl.renderer.VanillaModelEncoder;
 import net.minecraft.block.BlockState;
@@ -120,7 +121,7 @@ public class ItemRenderContext extends AbstractRenderContext {
 		matrix = matrixStack.peek().getPositionMatrix();
 		normalMatrix = matrixStack.peek().getNormalMatrix();
 
-		model.emitItemQuads(itemStack, randomSupplier, this);
+		((FabricBakedModel) model).emitItemQuads(itemStack, randomSupplier, this);
 
 		this.itemStack = null;
 		this.vertexConsumerProvider = null;
