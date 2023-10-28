@@ -27,10 +27,14 @@ String getGitVersion(Project project) {
 }
 
 String getChangelog(String githubUrl) {
+    def lastTag = grgit.describe(commit: "HEAD~", tags: true)?.replaceAll("-\\d+-[a-z0-9]+\$", "")
+    if (lastTag == null) {
+        return "Initial Release"
+    }
 	// Get changes since the last tag
 	return grgit.log(includes: ["HEAD"], excludes: [
 			// Get the last tag, removing the number of commits since the tag and the current HEAD~ hash
-			grgit.describe(commit: "HEAD~", tags: true).replaceAll("-\\d+-[a-z0-9]+\$", "")
+            lastTag
 	]).collect {
 		"- ${it.shortMessage} (${it.author.name})"
 	}.join("\n") + (githubUrl == null ? "" : "\n\nSee the full changes on Github: ${githubUrl}commits/${getGitVersion(project)}")

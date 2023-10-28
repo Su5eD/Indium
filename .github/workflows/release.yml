@@ -30,7 +30,7 @@ jobs:
       - uses: gradle/wrapper-validation-action@v1
       - run: ./gradlew clean build publishMods --stacktrace
         env:
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
       - name: Cleanup Gradle Cache
