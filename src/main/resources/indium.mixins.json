@@ -11,6 +11,7 @@
     "sodium.MixinBlockRenderCache",
     "sodium.MixinChunkBuilderMeshingTask",
     "sodium.MixinWorldSlice",
+    "sodium.MixinWorldSliceLocal",
     "sodium.MixinClonedChunkSection"
   ],
   "injectors": {
