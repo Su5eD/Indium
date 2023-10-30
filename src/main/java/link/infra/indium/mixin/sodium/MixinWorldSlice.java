@@ -3,12 +3,15 @@ package link.infra.indium.mixin.sodium;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceMap;
 import link.infra.indium.other.ClonedChunkSectionExtension;
 import me.jellysquid.mods.sodium.client.world.WorldSlice;
+import me.jellysquid.mods.sodium.client.world.biome.BiomeSlice;
 import me.jellysquid.mods.sodium.client.world.cloned.ChunkRenderContext;
 import me.jellysquid.mods.sodium.client.world.cloned.ClonedChunkSection;
 import net.fabricmc.fabric.api.blockview.v2.FabricBlockView;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,6 +33,9 @@ public abstract class MixinWorldSlice implements FabricBlockView, RenderAttached
     private int originY;
     @Shadow
     private int originZ;
+    @Shadow
+    @Final
+    private BiomeSlice biomeSlice;
 
     @Shadow
     public static int getLocalSectionIndex(int x, int y, int z) {
@@ -75,5 +81,15 @@ public abstract class MixinWorldSlice implements FabricBlockView, RenderAttached
         }
 
         return blockEntityRenderDataMap.get(getLocalBlockIndex(relX & 15, relY & 15, relZ & 15));
+    }
+
+    @Override
+    public boolean hasBiomes() {
+        return true;
+    }
+
+    @Override
+    public RegistryEntry<Biome> getBiomeFabric(BlockPos pos) {
+        return this.biomeSlice.getBiome(pos.getX(), pos.getY(), pos.getZ());
     }
 }
