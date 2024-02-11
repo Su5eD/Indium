@@ -32,6 +32,7 @@ import net.fabricmc.fabric.impl.renderer.VanillaModelEncoder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
@@ -133,11 +134,21 @@ public abstract class AbstractBlockRenderContext extends AbstractRenderContext {
 		final boolean ao = blockInfo.useAo && (aoMode == TriState.TRUE || (aoMode == TriState.DEFAULT && blockInfo.defaultAo));
 		final boolean emissive = mat.emissive();
 		final RenderLayer renderLayer = blockInfo.effectiveRenderLayer(mat.blendMode());
-		final Material sodiumMaterial = DefaultMaterials.forRenderLayer(renderLayer);
+		final Material sodiumMaterial = DefaultMaterials.forRenderLayer(coerceRenderLayer(renderLayer));
 
 		colorizeQuad(quad, colorIndex);
 		shadeQuad(quad, isVanilla, ao, emissive);
 		bufferQuad(quad, sodiumMaterial);
+	}
+
+	private RenderLayer coerceRenderLayer(RenderLayer renderLayer) {
+		if (renderLayer == TexturedRenderLayers.getEntityCutout()) {
+			return RenderLayer.getCutout();
+		}
+		if (renderLayer == TexturedRenderLayers.getEntityTranslucentCull() || renderLayer == TexturedRenderLayers.getItemEntityTranslucentCull()) {
+			return RenderLayer.getTranslucent();
+		}
+		return renderLayer;
 	}
 
 	/** handles block color, common to all renders. */
