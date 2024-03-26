@@ -25,6 +25,9 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
 
+import dev.su5ed.lazurite.util.FlawlessFrames;
+import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.slf4j.Logger;
 
@@ -144,5 +147,10 @@ public class Indium {
 		}
 
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(SpriteFinderCache.ReloadListener.INSTANCE);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onConstruct);
+	}
+
+	public void onConstruct(FMLConstructModEvent event) {
+		event.enqueueWork(FlawlessFrames::onClientInitialization);
 	}
 }
