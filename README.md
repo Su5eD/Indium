@@ -1,3 +1,9 @@
+# ⚠️ Deprecation notice ⚠️
+
+## **As of version [0.3.20](https://modrinth.com/mod/embeddium/version/QmRSmFyB), Embeddium now comes with built-in support for Fabric Rendering APIs, eliminating the need for using Lazurite. Get the latest release of Embeddium [here](https://modrinth.com/mod/embeddium).**
+
+---
+
 <img src="src/main/resources/assets/lazurite/icon.png" width="128">
 
 # Lazurite
